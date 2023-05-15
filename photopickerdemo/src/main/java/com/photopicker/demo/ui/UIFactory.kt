@@ -23,9 +23,9 @@ class CustomTitleView : ICustomTitleLayout {
 
     override fun genTitleLayout(context: Context, selectedActionListener: ISelectedActionListener): View {
         val view = LayoutInflater.from(context).inflate(R.layout.layout_photo_select_cust_title, null)
-        mTvDone = view.findViewById<TextView>(R.id.tv_right)
-        mTvTitle = view.findViewById<TextView>(R.id.tv_title)
         mIvBack = view.findViewById<ImageView>(R.id.iv_left)
+        mTvTitle = view.findViewById<TextView>(R.id.tv_title)
+        mTvDone = view.findViewById<TextView>(R.id.tv_right)
 
         mTvTitle?.visibility =View.VISIBLE
         mTvDone?.visibility = View.VISIBLE
