@@ -1,4 +1,4 @@
-package me.iwf.PhotoPickerDemo;
+package com.photopicker.demo.ui;
 
 import android.content.Context;
 import android.view.GestureDetector;

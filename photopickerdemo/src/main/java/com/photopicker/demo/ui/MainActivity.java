@@ -1,4 +1,4 @@
-package me.iwf.PhotoPickerDemo;
+package com.photopicker.demo.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.photopicker.demo.R;
 import me.iwf.photopicker.PhotoPicker;
 import me.iwf.photopicker.PhotoPreview;
 
@@ -56,6 +58,11 @@ public class MainActivity extends AppCompatActivity {
       public void onClick(View v) {
         PhotoPicker.builder()
                 .setPhotoCount(1)
+                .setShowCamera(true)
+                .setPreviewEnabled(true)
+                .setGridColumnCount(3)
+                .setCustomTitleView(new CustomTitleView())
+                .setPageBgColorRes(R.color.__picker_color_white) //R.color.__picker_color_red
                 .start(MainActivity.this);
       }
     });
@@ -76,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         PhotoPicker.builder()
                 .setPhotoCount(9)
                 .setGridColumnCount(4)
-                .setCustomeView(new CustomMade())
+                .setCustomTitleView(new CustomTitleView())
                 .start(MainActivity.this);
       }
     });

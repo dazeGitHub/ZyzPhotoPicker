@@ -10,19 +10,19 @@ import android.view.View
  * email wang_x_le@163.com
  **/
 
-interface ICustomMadeUi {
+interface ICustomTitleLayout {
 
-    fun titleLayout(context: Context,selectedAction: ISelectedAction): View?
+    fun genTitleLayout(context: Context, selectedAction: ISelectedActionListener): View?
 
     fun setTitleCount(coutDes:String)
 }
 
 
-interface ISelectedAction{
+interface ISelectedActionListener{
     fun done()
     fun back()
 }
 
 object ActivityData {
-    var customView: ICustomMadeUi? = null
+    var customTitleView: ICustomTitleLayout? = null
 }

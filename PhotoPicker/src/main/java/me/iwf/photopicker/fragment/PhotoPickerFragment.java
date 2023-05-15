@@ -12,6 +12,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.ListPopupWindow;
@@ -29,6 +30,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.iwf.photopicker.PhotoPicker;
 import me.iwf.photopicker.PhotoPickerActivity;
 import me.iwf.photopicker.R;
 import me.iwf.photopicker.adapter.PhotoGridAdapter;
@@ -74,16 +76,20 @@ public class PhotoPickerFragment extends Fragment {
     private ListPopupWindow listPopupWindow;
     private RequestManager mGlideRequestManager;
 
+    private int mBgColor;
+
     boolean isAddCamerePhoto = false;
 
-    public static PhotoPickerFragment newInstance(boolean showCamera, boolean showGif,
-                                                  boolean previewEnable, int column, int maxCount, ArrayList<String> originalPhotos) {
+    public static PhotoPickerFragment newInstance(boolean showCamera, boolean showGif, boolean previewEnable,
+                                                  int column, int maxCount, int bgColor,
+                                                  ArrayList<String> originalPhotos) {
         Bundle args = new Bundle();
         args.putBoolean(EXTRA_CAMERA, showCamera);
         args.putBoolean(EXTRA_GIF, showGif);
         args.putBoolean(EXTRA_PREVIEW_ENABLED, previewEnable);
         args.putInt(EXTRA_COLUMN, column);
         args.putInt(EXTRA_COUNT, maxCount);
+        args.putInt(PhotoPicker.PAGE_BG_COLOR_RES, bgColor);
         args.putStringArrayList(EXTRA_ORIGIN, originalPhotos);
         PhotoPickerFragment fragment = new PhotoPickerFragment();
         fragment.setArguments(args);
@@ -100,6 +106,7 @@ public class PhotoPickerFragment extends Fragment {
 
         directories = new ArrayList<>();
         originalPhotos = getArguments().getStringArrayList(EXTRA_ORIGIN);
+        mBgColor = getArguments().getInt(PhotoPicker.PAGE_BG_COLOR_RES, 0);
 
         column = getArguments().getInt(EXTRA_COLUMN, DEFAULT_COLUMN_NUMBER);
         boolean showCamera = getArguments().getBoolean(EXTRA_CAMERA, true);
@@ -161,6 +168,11 @@ public class PhotoPickerFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(photoGridAdapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        LinearLayout llSelectAll = rootView.findViewById(R.id.ll_bottom_select_all);
+        if(mBgColor != 0){
+            llSelectAll.setBackgroundColor(getResources().getColor(mBgColor));
+        }
 
         final Button btSwitchDirectory = (Button) rootView.findViewById(R.id.button);
 

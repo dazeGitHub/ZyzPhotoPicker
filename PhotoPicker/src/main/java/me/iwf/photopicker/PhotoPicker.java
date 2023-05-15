@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment;
 import java.util.ArrayList;
 
 import me.iwf.photopicker.customui.ActivityData;
-import me.iwf.photopicker.customui.ICustomMadeUi;
+import me.iwf.photopicker.customui.ICustomTitleLayout;
 import me.iwf.photopicker.utils.PermissionsUtils;
 
 /**
@@ -29,6 +29,7 @@ public class PhotoPicker {
 
     public final static String EXTRA_MAX_COUNT = "MAX_COUNT";
     public final static String EXTRA_SHOW_CAMERA = "SHOW_CAMERA";
+    public final static String PAGE_BG_COLOR_RES = "PAGE_BG_COLOR_RES";
     public final static String EXTRA_SHOW_GIF = "SHOW_GIF";
     public final static String EXTRA_GRID_COLUMN = "column";
     public final static String EXTRA_ORIGINAL_PHOTOS = "ORIGINAL_PHOTOS";
@@ -132,8 +133,13 @@ public class PhotoPicker {
             return this;
         }
 
-        public PhotoPickerBuilder setCustomeView(ICustomMadeUi customMadeUi) {
-            ActivityData.INSTANCE.setCustomView(customMadeUi);
+        public PhotoPickerBuilder setPageBgColorRes(int bgColorRes){
+            mPickerOptionsBundle.putInt(PAGE_BG_COLOR_RES, bgColorRes);
+            return this;
+        }
+
+        public PhotoPickerBuilder setCustomTitleView(ICustomTitleLayout customMadeUi) {
+            ActivityData.INSTANCE.setCustomTitleView(customMadeUi);
             return this;
         }
     }

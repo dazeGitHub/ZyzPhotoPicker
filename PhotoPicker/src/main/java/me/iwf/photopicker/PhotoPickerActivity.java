@@ -16,8 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.iwf.photopicker.customui.ActivityData;
-import me.iwf.photopicker.customui.ICustomMadeUi;
-import me.iwf.photopicker.customui.ISelectedAction;
+import me.iwf.photopicker.customui.ICustomTitleLayout;
+import me.iwf.photopicker.customui.ISelectedActionListener;
 import me.iwf.photopicker.entity.Photo;
 import me.iwf.photopicker.event.OnItemCheckListener;
 import me.iwf.photopicker.fragment.ImagePagerFragment;
@@ -34,7 +34,9 @@ import static me.iwf.photopicker.PhotoPicker.EXTRA_SHOW_CAMERA;
 import static me.iwf.photopicker.PhotoPicker.EXTRA_SHOW_GIF;
 import static me.iwf.photopicker.PhotoPicker.KEY_SELECTED_PHOTOS;
 
-public class PhotoPickerActivity extends AppCompatActivity implements ISelectedAction {
+import com.gyf.immersionbar.ImmersionBar;
+
+public class PhotoPickerActivity extends AppCompatActivity implements ISelectedActionListener {
 
     private PhotoPickerFragment pickerFragment;
     private ImagePagerFragment imagePagerFragment;
@@ -49,8 +51,8 @@ public class PhotoPickerActivity extends AppCompatActivity implements ISelectedA
 
     private boolean showGif = false;
     private ArrayList<String> originalPhotos = null;
-    private ICustomMadeUi iCustomeMadeUi;
-
+    private ICustomTitleLayout mCustomeTitleView;
+    private int mBgColor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +61,17 @@ public class PhotoPickerActivity extends AppCompatActivity implements ISelectedA
         boolean showCamera = getIntent().getBooleanExtra(EXTRA_SHOW_CAMERA, true);
         boolean showGif = getIntent().getBooleanExtra(EXTRA_SHOW_GIF, false);
         boolean previewEnabled = getIntent().getBooleanExtra(EXTRA_PREVIEW_ENABLED, true);
-        iCustomeMadeUi = ActivityData.INSTANCE.getCustomView();
+        mBgColor = getIntent().getIntExtra(PhotoPicker.PAGE_BG_COLOR_RES, 0);
+
+        if(mBgColor != 0){
+            ImmersionBar.with(this)
+                    .fitsSystemWindows(true)  //使用该属性,必须指定状态栏颜色
+                    .statusBarDarkFont(true, 0.2f)
+                    .statusBarColor(mBgColor)
+                    .init();
+        }
+
+        mCustomeTitleView = ActivityData.INSTANCE.getCustomTitleView();
         setShowGif(showGif);
 
         setContentView(R.layout.__picker_activity_photo_picker);
@@ -73,7 +85,7 @@ public class PhotoPickerActivity extends AppCompatActivity implements ISelectedA
         pickerFragment = (PhotoPickerFragment) getSupportFragmentManager().findFragmentByTag("tag");
         if (pickerFragment == null) {
             pickerFragment = PhotoPickerFragment
-                    .newInstance(showCamera, showGif, previewEnabled, columnNumber, maxCount, originalPhotos);
+                    .newInstance(showCamera, showGif, previewEnabled, columnNumber, maxCount, mBgColor, originalPhotos);
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.container, pickerFragment, "tag")
@@ -104,11 +116,11 @@ public class PhotoPickerActivity extends AppCompatActivity implements ISelectedA
                     return false;
                 }
 
-                if (iCustomeMadeUi != null) {
+                if (mCustomeTitleView != null) {
                     if (maxCount > 1) {
-                        iCustomeMadeUi.setTitleCount(getString(R.string.__picker_done_with_count, selectedItemCount, maxCount));
+                        mCustomeTitleView.setTitleCount(getString(R.string.__picker_done_with_count, selectedItemCount, maxCount));
                     } else {
-                        iCustomeMadeUi.setTitleCount(getString(R.string.__picker_done));
+                        mCustomeTitleView.setTitleCount(getString(R.string.__picker_done));
                     }
                 } else {
                     if (menuDoneItem != null) {
@@ -128,16 +140,18 @@ public class PhotoPickerActivity extends AppCompatActivity implements ISelectedA
     }
 
     private void setTitle() {
-        if (iCustomeMadeUi != null) {
+        if (mCustomeTitleView != null) {
             menuIsInflated = true;
             FrameLayout flTitleRoout = findViewById(R.id.fl_title_root);
             flTitleRoout.removeAllViews();
-            flTitleRoout.addView(iCustomeMadeUi.titleLayout(this, this));
+            flTitleRoout.addView(mCustomeTitleView.genTitleLayout(this, this));
         } else {
             Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(mToolbar);
             setTitle(R.string.__picker_title);
-
+            if(mBgColor != 0){
+                mToolbar.setBackgroundColor(getResources().getColor(mBgColor));
+            }
             ActionBar actionBar = getSupportActionBar();
             assert actionBar != null;
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -153,7 +167,7 @@ public class PhotoPickerActivity extends AppCompatActivity implements ISelectedA
             if (pickerFragment != null && pickerFragment.isResumed()) {
                 List<String> photos = pickerFragment.getPhotoGridAdapter().getSelectedPhotos();
                 int size = photos == null ? 0 : photos.size();
-                if (iCustomeMadeUi == null && menuDoneItem != null) {
+                if (mCustomeTitleView == null && menuDoneItem != null) {
                     menuDoneItem.setEnabled(size > 0);
                     if (maxCount > 1) {
                         menuDoneItem.setTitle(getString(R.string.__picker_done_with_count, size, maxCount));
@@ -161,11 +175,11 @@ public class PhotoPickerActivity extends AppCompatActivity implements ISelectedA
                         menuDoneItem.setTitle(getString(R.string.__picker_done));
                     }
                 } else {
-                    if (iCustomeMadeUi != null) {
+                    if (mCustomeTitleView != null) {
                         if (maxCount > 1) {
-                            iCustomeMadeUi.setTitleCount(getString(R.string.__picker_done_with_count, size, maxCount));
+                            mCustomeTitleView.setTitleCount(getString(R.string.__picker_done_with_count, size, maxCount));
                         } else {
-                            iCustomeMadeUi.setTitleCount(getString(R.string.__picker_done));
+                            mCustomeTitleView.setTitleCount(getString(R.string.__picker_done));
                         }
                     }
                 }
@@ -242,7 +256,7 @@ public class PhotoPickerActivity extends AppCompatActivity implements ISelectedA
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ActivityData.INSTANCE.setCustomView(null);
+        ActivityData.INSTANCE.setCustomTitleView(null);
     }
 
     public PhotoPickerActivity getActivity() {

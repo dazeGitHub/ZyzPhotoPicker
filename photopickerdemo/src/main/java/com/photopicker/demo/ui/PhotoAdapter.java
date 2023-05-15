@@ -1,4 +1,4 @@
-package me.iwf.PhotoPickerDemo;
+package com.photopicker.demo.ui;
 
 import android.content.Context;
 import android.net.Uri;
@@ -43,7 +43,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
     View itemView = null;
     switch (viewType) {
       case TYPE_ADD:
-        itemView = inflater.inflate(me.iwf.PhotoPickerDemo.R.layout.item_add, parent, false);
+        itemView = inflater.inflate(com.photopicker.demo.R.layout.item_add, parent, false);
         break;
       case TYPE_PHOTO:
         itemView = inflater.inflate(R.layout.__picker_item_photo, parent, false);
