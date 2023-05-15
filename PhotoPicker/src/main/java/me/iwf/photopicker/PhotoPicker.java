@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
 
-import me.iwf.photopicker.customui.ActivityData;
+import me.iwf.photopicker.customui.CustomTitleLayoutData;
 import me.iwf.photopicker.customui.ICustomTitleLayout;
 import me.iwf.photopicker.utils.PermissionsUtils;
 
@@ -139,7 +139,7 @@ public class PhotoPicker {
         }
 
         public PhotoPickerBuilder setCustomTitleView(ICustomTitleLayout customMadeUi) {
-            ActivityData.INSTANCE.setCustomTitleView(customMadeUi);
+            CustomTitleLayoutData.customTitleLayout = customMadeUi;
             return this;
         }
     }

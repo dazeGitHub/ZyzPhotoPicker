@@ -15,9 +15,8 @@ import androidx.appcompat.widget.Toolbar;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.iwf.photopicker.customui.ActivityData;
+import me.iwf.photopicker.customui.CustomTitleLayoutData;
 import me.iwf.photopicker.customui.ICustomTitleLayout;
-import me.iwf.photopicker.customui.ISelectedActionListener;
 import me.iwf.photopicker.entity.Photo;
 import me.iwf.photopicker.event.OnItemCheckListener;
 import me.iwf.photopicker.fragment.ImagePagerFragment;
@@ -36,7 +35,7 @@ import static me.iwf.photopicker.PhotoPicker.KEY_SELECTED_PHOTOS;
 
 import com.gyf.immersionbar.ImmersionBar;
 
-public class PhotoPickerActivity extends AppCompatActivity implements ISelectedActionListener {
+public class PhotoPickerActivity extends AppCompatActivity implements ICustomTitleLayout.ISelectedActionListener {
 
     private PhotoPickerFragment pickerFragment;
     private ImagePagerFragment imagePagerFragment;
@@ -71,7 +70,7 @@ public class PhotoPickerActivity extends AppCompatActivity implements ISelectedA
                     .init();
         }
 
-        mCustomeTitleView = ActivityData.INSTANCE.getCustomTitleView();
+        mCustomeTitleView = CustomTitleLayoutData.customTitleLayout;
         setShowGif(showGif);
 
         setContentView(R.layout.__picker_activity_photo_picker);
@@ -256,7 +255,7 @@ public class PhotoPickerActivity extends AppCompatActivity implements ISelectedA
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ActivityData.INSTANCE.setCustomTitleView(null);
+        CustomTitleLayoutData.customTitleLayout = null;
     }
 
     public PhotoPickerActivity getActivity() {
