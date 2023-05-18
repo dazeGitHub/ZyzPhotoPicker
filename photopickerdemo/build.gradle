@@ -9,8 +9,8 @@ android {
         applicationId "com.photopicker.demo"
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 28
-        versionName "2.2"
+        versionCode 29
+        versionName "2.3"
     }
     buildTypes {
         release {
