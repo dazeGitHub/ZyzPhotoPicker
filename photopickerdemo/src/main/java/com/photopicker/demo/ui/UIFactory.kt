@@ -7,7 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.photopicker.demo.R
 import me.iwf.photopicker.customui.ICustomTitleLayout
-import me.iwf.photopicker.customui.ISelectedActionListener
+import me.iwf.photopicker.customui.ICustomTitleLayout.ISelectedActionListener
 
 
 /**
